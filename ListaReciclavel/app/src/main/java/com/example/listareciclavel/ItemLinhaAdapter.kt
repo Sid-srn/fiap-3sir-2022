@@ -26,6 +26,9 @@ class ItemLinhaAdapter : RecyclerView.Adapter<ItemLinhaAdapter.ItemLinhaHolder>(
 
     override fun onBindViewHolder(holder: ItemLinhaHolder, position: Int) {
         holder.bind(lista[position])
+        holder.itemListaView.itemAddBtm.setOnClickListener {
+            removeLista(lista[position])
+        }
     }
 
     override fun getItemCount(): Int = lista.size
@@ -34,6 +37,18 @@ class ItemLinhaAdapter : RecyclerView.Adapter<ItemLinhaAdapter.ItemLinhaHolder>(
         lista.clear()
         lista.addAll(listaItem)
         notifyDataSetChanged()
+    }
+
+    fun addLista(newItem: ItemListaModel) {
+        lista.add(newItem)
+        notifyItemInserted(lista.size)
+    }
+
+    fun removeLista(removed: ItemListaModel) {
+        val removedIndex = lista.indexOf(removed)
+        lista.remove(removed)
+        notifyItemRemoved(removedIndex)
+        notifyItemRangeChanged(removedIndex, lista.size);
     }
 
 }
