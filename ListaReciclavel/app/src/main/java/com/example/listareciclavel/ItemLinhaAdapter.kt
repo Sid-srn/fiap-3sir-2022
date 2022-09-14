@@ -7,13 +7,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.listareciclavel.databinding.ItemListaBinding
 import com.example.listareciclavel.model.ItemListaModel
 
-class ItemLinhaAdapter : RecyclerView.Adapter<ItemLinhaAdapter.ItemLinhaHolder>() {
+class ItemLinhaAdapter(val itemListener: IcrudItem) :
+    RecyclerView.Adapter<ItemLinhaAdapter.ItemLinhaHolder>() {
 
-    val lista: MutableList<ItemListaModel> = mutableListOf()
+    private val lista: MutableList<ItemListaModel> = mutableListOf()
 
-    class ItemLinhaHolder(val itemListaView: ItemListaBinding) : RecyclerView.ViewHolder(itemListaView.root) {
+    class ItemLinhaHolder(val itemListaView: ItemListaBinding) :
+        RecyclerView.ViewHolder(itemListaView.root) {
 
-        fun bind(item: ItemListaModel){
+        fun bind(item: ItemListaModel) {
             itemListaView.itemTexto.text = item.item
         }
     }
@@ -29,11 +31,14 @@ class ItemLinhaAdapter : RecyclerView.Adapter<ItemLinhaAdapter.ItemLinhaHolder>(
         holder.itemListaView.itemAddBtm.setOnClickListener {
             removeLista(lista[position])
         }
+        holder.itemListaView.itemEditBtm.setOnClickListener {
+            itemListener.EditItem(lista[position], position)
+        }
     }
 
     override fun getItemCount(): Int = lista.size
 
-    fun setLista(listaItem: MutableList<ItemListaModel>){
+    fun setLista(listaItem: MutableList<ItemListaModel>) {
         lista.clear()
         lista.addAll(listaItem)
         notifyDataSetChanged()
@@ -49,6 +54,11 @@ class ItemLinhaAdapter : RecyclerView.Adapter<ItemLinhaAdapter.ItemLinhaHolder>(
         lista.remove(removed)
         notifyItemRemoved(removedIndex)
         notifyItemRangeChanged(removedIndex, lista.size);
+    }
+
+    fun editLista(editItem: ItemListaModel, position: Int) {
+        lista[position] = editItem
+        notifyItemInserted(position)
     }
 
 }
