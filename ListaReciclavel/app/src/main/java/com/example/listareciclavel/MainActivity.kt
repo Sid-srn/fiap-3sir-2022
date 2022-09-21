@@ -1,12 +1,19 @@
 package com.example.listareciclavel
 
+import android.app.Activity
+import android.app.AlertDialog
+import android.app.Instrumentation
 import android.content.Intent
 import android.os.Bundle
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.listareciclavel.Constants.INDEX_INTENT
+import com.example.listareciclavel.Constants.INDEX_RESULT
 import com.example.listareciclavel.Constants.ITEM_INTENT
+import com.example.listareciclavel.Constants.ITEM_RESULT
 import com.example.listareciclavel.databinding.ActivityMainBinding
 import com.example.listareciclavel.model.ItemListaModel
 
@@ -23,8 +30,9 @@ class MainActivity : AppCompatActivity(), IcrudItem {
         //var rc = findViewById<RecyclerView>(R.id.lista_reciclavel_rv)
         setupRecyCler()
         binding.addItemBtn.setOnClickListener {
-            lAdapter.addLista(ItemListaModel("Item $cont", "Detalhe do item $cont"))
-            cont++
+            //lAdapter.addLista(ItemListaModel("Item $cont", "Detalhe do item $cont"))
+            //cont++
+            AddItem()
         }
     }
 
@@ -39,19 +47,50 @@ class MainActivity : AppCompatActivity(), IcrudItem {
         binding.listaReciclavelRv.adapter = lAdapter
     }
 
-    override fun AddItem(item: ItemListaModel) {
-        TODO("Not yet implemented")
+    override fun AddItem() {
+        val intent = Intent(this, DetalheItemActivity::class.java)
+        register.launch(intent)
     }
 
     override fun EditItem(item: ItemListaModel, position: Int) {
         val intent = Intent(this, DetalheItemActivity::class.java)
         intent.putExtra(ITEM_INTENT, item)
         intent.putExtra(INDEX_INTENT, position)
-        startActivity(intent)
+        //startActivity(intent)
+        register.launch(intent)
+    }
+
+    val register = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result: ActivityResult ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            result.data?.let { data ->
+                if (data.hasExtra(ITEM_RESULT)) {
+                    val item = data.getParcelableExtra<ItemListaModel>(ITEM_RESULT)
+                    if (item != null) {
+                        val index = data.getIntExtra(INDEX_RESULT, -1)
+                        if (index >= 0) {
+                            lAdapter.editLista(item, index)
+                        } else {
+                            lAdapter.addLista(item)
+                        }
+                    }
+                }
+            }
+        }
     }
 
     override fun RemoveItem(item: ItemListaModel, position: Int) {
-        TODO("Not yet implemented")
+        val confirmDialog = AlertDialog.Builder(this)
+        confirmDialog.setTitle("Exclusão")
+        confirmDialog.setMessage("Confirma Exclusão do item " + item.item)
+        confirmDialog.setPositiveButton("Sim") { _, _ ->
+            lAdapter.removeLista(item)
+        }
+        confirmDialog.setNegativeButton("Não") { dialog, _ ->
+            dialog.cancel()
+        }
+        confirmDialog.show()
     }
 
 }

@@ -29,7 +29,7 @@ class ItemLinhaAdapter(val itemListener: IcrudItem) :
     override fun onBindViewHolder(holder: ItemLinhaHolder, position: Int) {
         holder.bind(lista[position])
         holder.itemListaView.itemAddBtm.setOnClickListener {
-            removeLista(lista[position])
+            itemListener.RemoveItem(lista[position], position)
         }
         holder.itemListaView.itemEditBtm.setOnClickListener {
             itemListener.EditItem(lista[position], position)
