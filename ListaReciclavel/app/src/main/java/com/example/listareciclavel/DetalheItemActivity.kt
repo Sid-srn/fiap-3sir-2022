@@ -32,12 +32,15 @@ class DetalheItemActivity : AppCompatActivity() {
 
         dataBind.btnConfirmar.setOnClickListener {
             Intent().apply{
-                putExtra(ITEM_RESULT, ItemListaModel(
-                    dataBind.editItem.text.toString(),
-                    dataBind.editItemDetail.text.toString()
-                ))
+                putExtra(
+                    ITEM_RESULT,
+                    ItemListaModel(
+                        dataBind.editItem.text.toString(),
+                        dataBind.editItemDetail.text.toString()
+                    )
+                )
                 putExtra(INDEX_RESULT, index)
-                setResult(Activity.RESULT_OK)
+                setResult(Activity.RESULT_OK, this)
             }
             this.finish()
         }

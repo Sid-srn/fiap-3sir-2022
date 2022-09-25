@@ -58,7 +58,8 @@ class ItemLinhaAdapter(val itemListener: IcrudItem) :
 
     fun editLista(editItem: ItemListaModel, position: Int) {
         lista[position] = editItem
-        notifyItemInserted(position)
+        notifyItemChanged(position)
+
     }
 
 }

@@ -60,7 +60,7 @@ class MainActivity : AppCompatActivity(), IcrudItem {
         register.launch(intent)
     }
 
-    val register = registerForActivityResult(
+    private val register = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result: ActivityResult ->
         if (result.resultCode == Activity.RESULT_OK) {
