@@ -17,6 +17,12 @@ class ItemLinhaAdapter(val itemListener: IcrudItem) :
 
         fun bind(item: ItemListaModel) {
             itemListaView.itemTexto.text = item.item
+            itemListaView.detalheItemText.text = item.detalhe
+            itemListaView.detaleItemView.visibility =
+                if (item.isDetailVisile)
+                    View.VISIBLE
+                else
+                    View.GONE
         }
     }
 
@@ -33,6 +39,10 @@ class ItemLinhaAdapter(val itemListener: IcrudItem) :
         }
         holder.itemListaView.itemEditBtm.setOnClickListener {
             itemListener.EditItem(lista[position], position)
+        }
+        holder.itemListaView.cardViewItem.setOnClickListener {
+            lista[position].isDetailVisile = !lista[position].isDetailVisile
+            notifyItemChanged(position)
         }
     }
 

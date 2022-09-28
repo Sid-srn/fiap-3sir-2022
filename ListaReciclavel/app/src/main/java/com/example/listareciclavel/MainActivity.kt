@@ -37,8 +37,8 @@ class MainActivity : AppCompatActivity(), IcrudItem {
     }
 
     private fun setupRecyCler() {
-        binding.listaReciclavelRv.layoutManager = //LinearLayoutManager(this)
-            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+        binding.listaReciclavelRv.layoutManager = LinearLayoutManager(this)
+
         val l = mutableListOf<ItemListaModel>()
         l.add(ItemListaModel("aaaa", "Detalhe AAAA"))
         l.add(ItemListaModel("bbb", "Detalhe BBBB"))
